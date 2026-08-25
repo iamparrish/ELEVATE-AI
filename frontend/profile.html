@@ -1,0 +1,33 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Profile — ELEVATE AI</title>
+<link rel="stylesheet" href="css/style.css">
+<link rel="stylesheet" href="css/responsive.css">
+</head>
+<body>
+<div class="app-shell">
+  <aside class="app-sidebar" id="sidebar-root"></aside>
+  <div class="sidebar-overlay" id="sidebar-overlay"></div>
+  <main class="app-main">
+    <header class="app-topbar" id="topbar-root"></header>
+    <div class="app-content" id="page-content" style="max-width:640px">
+      <h2>Profile</h2>
+      <div class="skeleton" style="height:300px;margin-top:16px"></div>
+    </div>
+  </main>
+</div>
+<nav class="bottom-nav" id="bottom-nav-root"></nav>
+
+<script src="js/api.js"></script>
+<script src="js/auth.js"></script>
+<script src="js/app.js"></script>
+<script>
+Auth.requireRole('student');
+initShell('profile');
+</script>
+<script src="js/profile.js"></script>
+</body>
+</html>

@@ -1,0 +1,55 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Assessments — ELEVATE AI</title>
+<link rel="stylesheet" href="css/style.css">
+<link rel="stylesheet" href="css/responsive.css">
+<link rel="stylesheet" href="css/assessment.css">
+</head>
+<body>
+<div class="app-shell">
+  <aside class="app-sidebar" id="sidebar-root"></aside>
+  <div class="sidebar-overlay" id="sidebar-overlay"></div>
+  <main class="app-main">
+    <header class="app-topbar" id="topbar-root"></header>
+    <div class="app-content" id="page-content">
+      <h2>Assessments</h2>
+      <p class="text-muted" style="margin-bottom:20px">Formal, timed assessments separate from everyday quiz practice.</p>
+
+      <div class="assess-mode-grid">
+        <div class="card assess-card card-hover" onclick="buildAssessment('diagnostic')"><h4>🧭 Diagnostic</h4><p>Establish your current understanding.</p></div>
+        <div class="card assess-card card-hover" onclick="buildAssessment('recommended')"><h4>✨ Recommended</h4><p>Based on your current learning path.</p></div>
+        <div class="card assess-card card-hover" onclick="showTopicBuilder('topic_test')"><h4>📘 Topic Test</h4><p>Choose a specific topic to test.</p></div>
+        <div class="card assess-card card-hover" onclick="showTopicBuilder('revision_test')"><h4>🔁 Revision Test</h4><p>Re-test a topic you've reviewed.</p></div>
+        <div class="card assess-card card-hover" onclick="buildAssessment('adaptive')"><h4>🎯 Adaptive Assessment</h4><p>Difficulty adjusts as you answer.</p></div>
+      </div>
+
+      <div class="card card-pad" id="topic-builder-panel" style="display:none;margin-bottom:24px">
+        <h3>Choose a topic</h3>
+        <div class="three-col">
+          <div class="field mb-0"><label>Subject</label><select class="input" id="tb-subject"></select></div>
+          <div class="field mb-0"><label>Topic</label><select class="input" id="tb-topic"></select></div>
+          <div class="field mb-0"><label>Number of Questions</label><input class="input" type="number" id="tb-num" value="8" min="5" max="15"></div>
+        </div>
+        <button class="btn btn-primary" onclick="buildTopicAssessment()">Start Assessment</button>
+      </div>
+
+      <h3 style="margin-bottom:12px">Your Assessments</h3>
+      <div id="assessments-list"><div class="skeleton" style="height:60px"></div></div>
+    </div>
+  </main>
+</div>
+<nav class="bottom-nav" id="bottom-nav-root"></nav>
+
+<script src="js/api.js"></script>
+<script src="js/auth.js"></script>
+<script src="js/app.js"></script>
+<script>
+Auth.requireRole('student');
+initShell('assessments');
+</script>
+<script src="js/assessments.js"></script>
+</body>
+</html>

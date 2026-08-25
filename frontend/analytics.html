@@ -1,0 +1,38 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Analytics — ELEVATE AI</title>
+<link rel="stylesheet" href="css/style.css">
+<link rel="stylesheet" href="css/responsive.css">
+<style>
+  .chart-card { padding: 20px; }
+  canvas.chart-canvas { width: 100%; height: 220px; }
+</style>
+</head>
+<body>
+<div class="app-shell">
+  <aside class="app-sidebar" id="sidebar-root"></aside>
+  <div class="sidebar-overlay" id="sidebar-overlay"></div>
+  <main class="app-main">
+    <header class="app-topbar" id="topbar-root"></header>
+    <div class="app-content" id="page-content">
+      <h2>Progress & Analytics</h2>
+      <p class="text-muted" style="margin-bottom:20px">Every chart here is calculated from your real activity in the database.</p>
+      <div class="skeleton" style="height:300px"></div>
+    </div>
+  </main>
+</div>
+<nav class="bottom-nav" id="bottom-nav-root"></nav>
+
+<script src="js/api.js"></script>
+<script src="js/auth.js"></script>
+<script src="js/app.js"></script>
+<script>
+Auth.requireRole('student');
+initShell('analytics');
+</script>
+<script src="js/analytics.js"></script>
+</body>
+</html>

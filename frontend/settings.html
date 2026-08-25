@@ -1,0 +1,66 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Settings — ELEVATE AI</title>
+<link rel="stylesheet" href="css/style.css">
+<link rel="stylesheet" href="css/responsive.css">
+</head>
+<body>
+<div class="app-shell">
+  <aside class="app-sidebar" id="sidebar-root"></aside>
+  <div class="sidebar-overlay" id="sidebar-overlay"></div>
+  <main class="app-main">
+    <header class="app-topbar" id="topbar-root"></header>
+    <div class="app-content" id="page-content" style="max-width:640px">
+      <h2>Settings</h2>
+      <p class="text-muted" style="margin-bottom:20px">Learning preferences and account options.</p>
+      <div class="card card-pad" style="margin-bottom:20px">
+        <h3>Learning Preferences</h3>
+        <div id="prefs-grid" style="display:grid;grid-template-columns:1fr 1fr;gap:10px;margin-bottom:16px"></div>
+        <button class="btn btn-primary" onclick="savePrefs()">Save Preferences</button>
+      </div>
+      <div class="card card-pad" style="margin-bottom:20px">
+        <h3>Notifications</h3>
+        <p class="text-sm">You'll be notified about assessment results, new recommendations, mastery changes, new quizzes and learning reminders.</p>
+      </div>
+      <div class="card card-pad">
+        <h3 style="color:var(--color-danger)">Account</h3>
+        <p class="text-sm">Logging out will end your current session on this device.</p>
+        <button class="btn btn-danger btn-sm" onclick="Auth.logout()">Log Out</button>
+      </div>
+    </div>
+  </main>
+</div>
+<nav class="bottom-nav" id="bottom-nav-root"></nav>
+
+<script src="js/api.js"></script>
+<script src="js/auth.js"></script>
+<script src="js/app.js"></script>
+<script>
+Auth.requireRole('student');
+initShell('settings');
+
+async function loadSettings() {
+  try {
+    const [profile, catalog] = await Promise.all([Api.get('/api/student/profile'), Api.get('/api/student/subjects-catalog')]);
+    const currentStyles = (profile.preferences && profile.preferences.style) || [];
+    document.getElementById('prefs-grid').innerHTML = catalog.preferences.map(p => `
+      <div class="choice-card ${currentStyles.includes(p.code) ? 'selected' : ''}" data-code="${p.code}" onclick="this.classList.toggle('selected')" style="border:1.5px solid ${currentStyles.includes(p.code) ? 'var(--color-primary)' : 'var(--color-border-strong)'};background:${currentStyles.includes(p.code) ? 'var(--color-primary-light)' : '#fff'};border-radius:8px;padding:12px;cursor:pointer"><strong>${p.label}</strong></div>
+    `).join('');
+  } catch (e) {
+    toast('Could not load settings', 'error');
+  }
+}
+async function savePrefs() {
+  const styles = [...document.querySelectorAll('#prefs-grid .selected')].map(el => el.dataset.code);
+  try {
+    await Api.put('/api/student/profile', { preferences: { style: styles } });
+    toast('Preferences saved', 'success');
+  } catch (e) { toast(e.message || 'Could not save preferences', 'error'); }
+}
+loadSettings();
+</script>
+</body>
+</html>

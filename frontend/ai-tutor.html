@@ -1,0 +1,57 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>AI Tutor — ELEVATE AI</title>
+<link rel="stylesheet" href="css/style.css">
+<link rel="stylesheet" href="css/responsive.css">
+<link rel="stylesheet" href="css/tutor.css">
+</head>
+<body>
+<div class="app-shell">
+  <aside class="app-sidebar" id="sidebar-root"></aside>
+  <div class="sidebar-overlay" id="sidebar-overlay"></div>
+  <main class="app-main">
+    <header class="app-topbar" id="topbar-root"></header>
+    <div class="app-content" style="padding-bottom:0">
+      <h2 style="margin-bottom:4px">AI Tutor</h2>
+      <p class="text-muted" style="margin-bottom:16px">Guides you to understand concepts - not just get final answers.</p>
+      <div class="tutor-shell">
+        <div class="card card-pad tutor-sidebar">
+          <button class="btn btn-primary btn-block btn-sm" style="margin-bottom:14px" onclick="newSession()">+ New Conversation</button>
+          <div id="sessions-list"><div class="skeleton" style="height:36px;margin-bottom:8px"></div></div>
+        </div>
+        <div class="tutor-main">
+          <div class="tutor-messages" id="messages">
+            <div class="empty-state" id="empty-tutor-state"><p>Ask a question about any topic, or upload study material and I'll ground my answers in it.</p></div>
+          </div>
+          <div class="tutor-actions">
+            <button class="btn btn-ghost btn-sm" onclick="sendAction('hint')">💡 Ask for Hint</button>
+            <button class="btn btn-ghost btn-sm" onclick="sendAction('simpler')">🔎 Explain Simpler</button>
+            <button class="btn btn-ghost btn-sm" onclick="sendAction('example')">📘 Give Example</button>
+            <button class="btn btn-ghost btn-sm" onclick="sendAction('summary')">📝 Summarize</button>
+            <button class="btn btn-ghost btn-sm" onclick="sendAction('practice')">✏️ Practice This</button>
+            <button class="btn btn-ghost btn-sm" onclick="sendAction('quiz')">🧩 Generate Quiz</button>
+          </div>
+          <div class="tutor-input-row">
+            <input class="input" id="chat-input" placeholder="Ask ELEVATE AI Tutor anything..." onkeydown="if(event.key==='Enter')sendMessage()">
+            <button class="btn btn-primary" onclick="sendMessage()">Send</button>
+          </div>
+        </div>
+      </div>
+    </div>
+  </main>
+</div>
+<nav class="bottom-nav" id="bottom-nav-root"></nav>
+
+<script src="js/api.js"></script>
+<script src="js/auth.js"></script>
+<script src="js/app.js"></script>
+<script>
+Auth.requireRole('student');
+initShell('ai-tutor');
+</script>
+<script src="js/tutor.js"></script>
+</body>
+</html>

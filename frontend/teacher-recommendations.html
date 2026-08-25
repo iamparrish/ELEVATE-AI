@@ -1,0 +1,83 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>AI Recommendations — ELEVATE AI</title>
+<link rel="stylesheet" href="css/style.css">
+<link rel="stylesheet" href="css/responsive.css">
+<style>
+  .rec-review-item { padding: 18px; margin-bottom: 12px; }
+</style>
+</head>
+<body>
+<div class="app-shell">
+  <aside class="app-sidebar" id="sidebar-root"></aside>
+  <div class="sidebar-overlay" id="sidebar-overlay"></div>
+  <main class="app-main">
+    <header class="app-topbar" id="topbar-root"></header>
+    <div class="app-content" id="page-content">
+      <h2>AI Recommendation Review</h2>
+      <p class="text-muted" style="margin-bottom:6px">ELEVATE AI assists with recommendations - you remain the final decision-maker. Approve, edit, regenerate or reject each one.</p>
+      <div class="skeleton" style="height:300px;margin-top:16px"></div>
+    </div>
+  </main>
+</div>
+
+<script src="js/api.js"></script>
+<script src="js/auth.js"></script>
+<script src="js/app.js"></script>
+<script>
+Auth.requireRole('teacher');
+initShell('teacher-recommendations');
+
+async function loadRecs() {
+  const content = document.getElementById('page-content');
+  try {
+    const data = await Api.get('/api/teacher/recommendations');
+    if (!data.recommendations.length) {
+      content.innerHTML = `<h2>AI Recommendation Review</h2><div class="empty-state">${Icons.empty}<p>No pending AI recommendations right now.</p></div>`;
+      return;
+    }
+    content.innerHTML = `
+      <h2>AI Recommendation Review</h2>
+      <p class="text-muted" style="margin-bottom:16px">ELEVATE AI assists with recommendations - you remain the final decision-maker.</p>
+      <div id="rec-list">${data.recommendations.map(renderRec).join('')}</div>
+    `;
+  } catch (e) {
+    content.innerHTML = `<h2>AI Recommendation Review</h2><div class="empty-state">${Icons.empty}<p>${e.message}</p></div>`;
+  }
+}
+
+function renderRec(r) {
+  return `
+    <div class="card rec-review-item" id="rec-${r.id}">
+      <div class="flex justify-between items-center" style="margin-bottom:8px">
+        <div><strong>${r.title}</strong><div class="text-xs text-muted">${r.student_name}${r.topic_name ? ' · ' + r.topic_name : ''}</div></div>
+        <span class="badge badge-neutral">${r.review_status}</span>
+      </div>
+      <p class="text-sm">${r.reason}</p>
+      <div class="flex gap-8">
+        <button class="btn btn-primary btn-sm" onclick="reviewRec(${r.id}, 'approve')">Approve</button>
+        <button class="btn btn-secondary btn-sm" onclick="reviewRec(${r.id}, 'regenerate')">Regenerate</button>
+        <button class="btn btn-ghost btn-sm" onclick="reviewRec(${r.id}, 'reject')">Reject</button>
+        <a href="teacher-students.html?student_id=${r.student_id}" class="btn btn-ghost btn-sm">View Student</a>
+      </div>
+    </div>`;
+}
+
+async function reviewRec(id, action) {
+  try {
+    await Api.post(`/api/teacher/recommendations/${id}/review`, { action });
+    toast(`Recommendation ${action}d`, 'success');
+    const el = document.getElementById(`rec-${id}`);
+    if (el) el.style.opacity = '0.5';
+  } catch (e) {
+    toast(e.message || 'Could not update recommendation', 'error');
+  }
+}
+
+loadRecs();
+</script>
+</body>
+</html>

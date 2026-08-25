@@ -1,0 +1,51 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Knowledge Graph — ELEVATE AI</title>
+<link rel="stylesheet" href="css/style.css">
+<link rel="stylesheet" href="css/responsive.css">
+<style>
+  .graph-wrap { position: relative; background: var(--color-surface); border: 1px solid var(--color-border); border-radius: var(--radius-md); overflow: hidden; height: 560px; }
+  .graph-controls { position: absolute; top: 14px; right: 14px; display: flex; flex-direction: column; gap: 6px; z-index: 5; }
+  .graph-controls button { width: 34px; height: 34px; border-radius: 8px; border: 1px solid var(--color-border-strong); background: #fff; cursor: pointer; font-weight: 800; }
+  #graph-canvas { cursor: grab; touch-action: none; }
+  .node-detail-panel { position: absolute; top: 0; right: 0; bottom: 0; width: 320px; background: #fff; border-left: 1px solid var(--color-border); padding: 20px; overflow-y: auto; transform: translateX(100%); transition: transform .2s ease; z-index: 10; }
+  .node-detail-panel.open { transform: translateX(0); }
+  @media (max-width: 700px) { .node-detail-panel { width: 100%; } }
+</style>
+</head>
+<body>
+<div class="app-shell">
+  <aside class="app-sidebar" id="sidebar-root"></aside>
+  <div class="sidebar-overlay" id="sidebar-overlay"></div>
+  <main class="app-main">
+    <header class="app-topbar" id="topbar-root"></header>
+    <div class="app-content" id="page-content">
+      <h2>Knowledge Graph</h2>
+      <p class="text-muted" style="margin-bottom:20px">Concepts you're learning, connected by prerequisite relationships. Click a node for details.</p>
+      <div class="graph-wrap" id="graph-wrap">
+        <div class="graph-controls">
+          <button onclick="zoomGraph(1.2)">+</button>
+          <button onclick="zoomGraph(0.8)">−</button>
+          <button onclick="resetGraph()">⟲</button>
+        </div>
+        <canvas id="graph-canvas"></canvas>
+        <div class="node-detail-panel" id="node-panel"></div>
+      </div>
+    </div>
+  </main>
+</div>
+<nav class="bottom-nav" id="bottom-nav-root"></nav>
+
+<script src="js/api.js"></script>
+<script src="js/auth.js"></script>
+<script src="js/app.js"></script>
+<script>
+Auth.requireRole('student');
+initShell('knowledge-graph');
+</script>
+<script src="js/knowledgeGraph.js"></script>
+</body>
+</html>

@@ -1,0 +1,62 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Notifications — ELEVATE AI</title>
+<link rel="stylesheet" href="css/style.css">
+<link rel="stylesheet" href="css/responsive.css">
+<style>
+  .notif-item { display: flex; gap: 14px; padding: 16px; border-bottom: 1px solid var(--color-border); cursor: pointer; }
+  .notif-item.unread { background: var(--color-primary-light); }
+  .notif-item:hover { background: #F7F7F6; }
+</style>
+</head>
+<body>
+<div class="app-shell">
+  <aside class="app-sidebar" id="sidebar-root"></aside>
+  <div class="sidebar-overlay" id="sidebar-overlay"></div>
+  <main class="app-main">
+    <header class="app-topbar" id="topbar-root"></header>
+    <div class="app-content" id="page-content" style="max-width:680px">
+      <h2>Notifications</h2>
+      <div class="card" id="notif-list" style="margin-top:16px"><div class="skeleton" style="height:200px"></div></div>
+    </div>
+  </main>
+</div>
+<nav class="bottom-nav" id="bottom-nav-root"></nav>
+
+<script src="js/api.js"></script>
+<script src="js/auth.js"></script>
+<script src="js/app.js"></script>
+<script>
+Auth.requireRole('student');
+initShell('notifications');
+
+const ICON_MAP = { assessment_result: '📊', recommendation: '✨', mastery_change: '⚠️', new_quiz: '🧩', reminder: '🔔', general: '📌' };
+
+async function loadNotifs() {
+  const container = document.getElementById('notif-list');
+  try {
+    const data = await Api.get('/api/notifications');
+    if (!data.notifications.length) {
+      container.innerHTML = `<div class="empty-state">${Icons.empty}<p>No notifications yet.</p></div>`;
+      return;
+    }
+    container.innerHTML = data.notifications.map(n => `
+      <div class="notif-item ${n.is_read ? '' : 'unread'}" onclick="markRead(${n.id}, this)">
+        <div style="font-size:20px">${ICON_MAP[n.type] || '📌'}</div>
+        <div><strong>${n.title}</strong><p class="text-sm" style="margin:2px 0">${n.message}</p><span class="text-xs text-muted">${timeAgo(n.created_at)}</span></div>
+      </div>`).join('');
+  } catch (e) {
+    container.innerHTML = `<p class="text-muted text-sm" style="padding:20px">Could not load notifications.</p>`;
+  }
+}
+async function markRead(id, el) {
+  el.classList.remove('unread');
+  try { await Api.post(`/api/notifications/${id}/read`); } catch (e) {}
+}
+loadNotifs();
+</script>
+</body>
+</html>

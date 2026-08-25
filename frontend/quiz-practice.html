@@ -1,0 +1,63 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Quiz Practice — ELEVATE AI</title>
+<link rel="stylesheet" href="css/style.css">
+<link rel="stylesheet" href="css/responsive.css">
+<link rel="stylesheet" href="css/quiz.css">
+</head>
+<body>
+<div class="app-shell">
+  <aside class="app-sidebar" id="sidebar-root"></aside>
+  <div class="sidebar-overlay" id="sidebar-overlay"></div>
+  <main class="app-main">
+    <header class="app-topbar" id="topbar-root"></header>
+    <div class="app-content" id="page-content">
+      <h2>Quiz Practice</h2>
+      <p class="text-muted" style="margin-bottom:20px">Personalized MCQs generated from your subjects, mastery and knowledge gaps.</p>
+
+      <div class="quiz-mode-grid">
+        <div class="card quiz-mode-card card-hover" onclick="openCustomQuiz('recommended')"><h4>✨ Recommended For You</h4><p>Auto-picked from your current gaps and level.</p></div>
+        <div class="card quiz-mode-card card-hover" onclick="openCustomQuiz('quick')"><h4>⚡ Quick Practice</h4><p>A short 5-question warm-up.</p></div>
+        <div class="card quiz-mode-card card-hover" onclick="showTopicPicker()"><h4>📚 Topic Practice</h4><p>Choose a subject and topic to drill.</p></div>
+        <div class="card quiz-mode-card card-hover" onclick="openCustomQuiz('weak_area')"><h4>⚠️ Weak Area Practice</h4><p>Focused on your detected knowledge gaps.</p></div>
+        <div class="card quiz-mode-card card-hover" onclick="openMistakes()"><h4>🔁 Previous Mistakes</h4><p>Retry questions you got wrong before.</p></div>
+        <div class="card quiz-mode-card card-hover" onclick="openCustomQuiz('daily')"><h4>📅 Daily Quiz</h4><p>A fresh personalized quiz for today.</p></div>
+      </div>
+
+      <div class="card card-pad" id="custom-quiz-panel" style="margin-bottom:24px">
+        <h3>Custom Quiz</h3>
+        <div class="three-col" style="margin-bottom:14px">
+          <div class="field mb-0"><label>Subject</label><select class="input" id="cq-subject"></select></div>
+          <div class="field mb-0"><label>Topic</label><select class="input" id="cq-topic"></select></div>
+          <div class="field mb-0"><label>Difficulty</label>
+            <select class="input" id="cq-difficulty">
+              <option value="easy">Easy</option><option value="medium" selected>Medium</option><option value="hard">Hard</option><option value="adaptive">Adaptive</option>
+            </select>
+          </div>
+        </div>
+        <div class="flex items-center gap-16">
+          <div class="field mb-0" style="width:160px"><label>Number of Questions</label><input class="input" type="number" id="cq-num" value="5" min="3" max="15"></div>
+          <button class="btn btn-primary" style="margin-top:22px" onclick="startCustomQuiz()">Generate Quiz</button>
+        </div>
+      </div>
+
+      <h3 style="margin-bottom:12px">Recent Quizzes</h3>
+      <div id="recent-quizzes"><div class="skeleton" style="height:60px"></div></div>
+    </div>
+  </main>
+</div>
+<nav class="bottom-nav" id="bottom-nav-root"></nav>
+
+<script src="js/api.js"></script>
+<script src="js/auth.js"></script>
+<script src="js/app.js"></script>
+<script>
+Auth.requireRole('student');
+initShell('quiz-practice');
+</script>
+<script src="js/quiz.js"></script>
+</body>
+</html>

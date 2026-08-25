@@ -1,0 +1,58 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Study Materials — ELEVATE AI</title>
+<link rel="stylesheet" href="css/style.css">
+<link rel="stylesheet" href="css/responsive.css">
+<style>
+  .dropzone { border: 2px dashed var(--color-border-strong); border-radius: var(--radius-lg); padding: 40px; text-align: center; cursor: pointer; transition: all .15s; margin-bottom: 24px; }
+  .dropzone.dragover { border-color: var(--color-primary); background: var(--color-primary-light); }
+  .pipeline-steps { display: flex; gap: 8px; flex-wrap: wrap; margin: 14px 0; }
+  .pipeline-step { padding: 6px 12px; border-radius: 999px; font-size: 12px; font-weight: 700; background: #F1F1EF; color: var(--color-text-muted); }
+  .pipeline-step.done { background: var(--color-success-light); color: var(--color-success); }
+  .pipeline-step.active { background: var(--color-primary-light); color: var(--color-primary); }
+  .material-card { padding: 18px; margin-bottom: 14px; }
+  .concept-chip { display: inline-block; background: var(--color-violet-light); color: var(--color-violet); padding: 5px 12px; border-radius: 999px; font-size: 12.5px; margin: 3px 6px 3px 0; cursor: pointer; }
+</style>
+</head>
+<body>
+<div class="app-shell">
+  <aside class="app-sidebar" id="sidebar-root"></aside>
+  <div class="sidebar-overlay" id="sidebar-overlay"></div>
+  <main class="app-main">
+    <header class="app-topbar" id="topbar-root"></header>
+    <div class="app-content" id="page-content">
+      <h2>Study Materials</h2>
+      <p class="text-muted" style="margin-bottom:20px">Upload PDFs or notes - ELEVATE AI extracts concepts and grounds the AI Tutor and quizzes in your material.</p>
+
+      <div class="dropzone" id="dropzone">
+        <input type="file" id="file-input" accept=".pdf,.txt,.md" style="display:none">
+        <div style="font-size:32px;margin-bottom:8px">📄</div>
+        <strong>Drag & drop a PDF or text file here</strong>
+        <p class="text-sm text-muted">or click to browse (PDF, TXT, MD)</p>
+      </div>
+
+      <div id="upload-progress" class="hidden card card-pad" style="margin-bottom:24px">
+        <strong id="upload-filename"></strong>
+        <div class="pipeline-steps" id="pipeline-steps"></div>
+      </div>
+
+      <h3 style="margin-bottom:12px">Your Materials</h3>
+      <div id="materials-list"><div class="skeleton" style="height:80px"></div></div>
+    </div>
+  </main>
+</div>
+<nav class="bottom-nav" id="bottom-nav-root"></nav>
+
+<script src="js/api.js"></script>
+<script src="js/auth.js"></script>
+<script src="js/app.js"></script>
+<script>
+Auth.requireRole('student');
+initShell('study-materials');
+</script>
+<script src="js/studyMaterials.js"></script>
+</body>
+</html>
